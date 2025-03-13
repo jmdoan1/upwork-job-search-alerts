@@ -1,0 +1,6 @@
+TELEGRAM_BOT_TOKEN=yourbottoken
+TELEGRAM_CHAT_ID=yourchatid
+
+SEARCH_URLS=["https://www.upwork.com/nx/search/jobs"]
+
+PROXY_LIST=["socks5://username:password@dallas.us.socks.nordhold.net:1080","socks5://username:password@atlanta.us.socks.nordhold.net:1080"]
