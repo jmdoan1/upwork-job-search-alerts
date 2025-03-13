@@ -2,6 +2,8 @@
 
 This tool monitors Upwork for new job postings matching your search criteria and sends real-time alerts to your Telegram account. Never miss out on potential job opportunities again!
 
+![Example telegram message](./assets/preview.jpeg)
+
 ## Features
 
 - 🔍 Monitor multiple custom Upwork job search URLs
