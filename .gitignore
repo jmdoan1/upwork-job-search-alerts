@@ -162,3 +162,4 @@ cython_debug/
 # CUSTOM
 *.pkl
 /proxy_auth_plugin
+/debug

@@ -634,7 +634,7 @@ def extract_jobs_from_search(html_content):
             job_classes = first_job.get('class', [])
             job_attrs = first_job.attrs
             print(f"Classes: {job_classes}")
-            print(f"Attributes: {', '.join([f'{k}=\"{v}\"' for k, v in job_attrs.items() if k != 'class'])}")
+            print(f"Attributes: {', '.join([f'{k}={repr(v)}' for k, v in job_attrs.items() if k != 'class'])}")
             
             potential_title_selectors = [
                 'h2.job-tile-title a', 
