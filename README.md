@@ -1,132 +1,345 @@
-# Upwork Job Alert Bot
+# Upwork Job Search Alerts
 
-This bot automatically scans Upwork job postings and sends you alerts via Telegram when new jobs matching your criteria are posted.
+This tool allows you to monitor Upwork for new job postings matching your search criteria and sends real-time alerts to your Telegram account. Never miss out on potential job opportunities again!
 
 ## Features
 
-- Monitors search URLs for new job postings
-- Sends detailed Telegram notifications with job information
-- Tracks previously seen jobs to avoid duplicate alerts
-- Works with proxy servers for enhanced anonymity
-- Saves debug information (optional) for troubleshooting
+- 🔍 Monitor multiple custom Upwork job search URLs
+- 🔔 Get instant Telegram notifications for new job postings
+- 💰 View complete job details (budget, client info, required skills)
+- 🌐 Support for proxy connections to avoid rate limiting
+- 🤖 Automated regular checking with customizable intervals
+- 🧠 Smart tracking to avoid duplicate notifications
 
-## Setup Instructions
+## Prerequisites
 
-### Prerequisites
+Before installing this tool, you need to have:
 
-You need to have Python installed on your computer. If you don't have Python installed:
+1. **Python 3.8 or higher** installed on your system
+2. **A Telegram account** to receive notifications
+3. **Chrome/Chromium browser** installed (used by the Selenium web driver)
 
-1. Download Python from [python.org](https://www.python.org/downloads/)
-2. Install it, making sure to check "Add Python to PATH" during installation
+## Installation Guide
 
-### Installation Steps
+### Step 0: Ensure Python and pip are working correctly
 
-1. **Download the project**
+#### Windows
 
-   - Either download the ZIP file and extract it, or clone the repository if you know how to use Git
-   - Open a terminal/command prompt and navigate to the folder where you extracted the files
+1. Check if Python is installed:
 
-2. **Install required packages**
+   - Open Command Prompt (search for "cmd" in the Start menu)
+   - Type `python --version` and press Enter
+   - You should see something like "Python 3.8.x" or higher
+   - If you see "Command not found" or a version lower than 3.8, you need to [install Python](https://www.python.org/downloads/windows/)
 
-   - Run the following command to install the required packages:
+2. Verify pip is working:
+
+   - In Command Prompt, type `pip --version` and press Enter
+   - You should see pip version information
+
+3. If Python is installed but commands aren't recognized:
+   - This usually means Python isn't in your PATH
+   - Either reinstall Python and check "Add Python to PATH" during installation
+   - Or use the full path to Python:
      ```
-     pip install -r requirements.txt
-     ```
-
-3. **Set up a Telegram bot**
-
-   - Open Telegram and search for "BotFather"
-   - Start a chat with BotFather and create a new bot with the command `/newbot`
-   - Follow the instructions to set a name and username for your bot
-   - Once created, you'll receive a token that looks like `123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ`
-   - Start a chat with your new bot and send it any message
-
-4. **Get your Telegram Chat ID**
-
-   - Open your web browser and go to: `https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates`
-     (replace `<YOUR_BOT_TOKEN>` with the token you received)
-   - Look for the `"chat":{"id":123456789}` section in the response
-   - The number shown as "id" is your Chat ID
-
-5. **Configure the script**
-
-   - Open the `upwork-job-alert-bot.py` file in a text editor
-   - Find the following lines and update them with your information:
-
-     ```python
-     TELEGRAM_BOT_TOKEN = "your_telegram_bot_token_here"
-     TELEGRAM_CHAT_ID = "your_telegram_chat_id_here"
-
-     SEARCH_URLS = [
-         "https://www.upwork.com/nx/search/jobs/?q=your_search_terms_here",
-     ]
+     C:\Users\YourUsername\AppData\Local\Programs\Python\Python38\python.exe
+     C:\Users\YourUsername\AppData\Local\Programs\Python\Python38\Scripts\pip.exe
      ```
 
-   - You can add multiple search URLs to monitor different types of jobs
-   - Set the `USE_PROXY` to `False` if you don't want to use a proxy, or configure your own proxy settings if needed
+#### macOS
 
-## Running the Bot
+1. Check Python installation:
 
-1. **Start the bot**
+   - Open Terminal (from Applications > Utilities)
+   - Type `python3 --version` and press Enter
+   - You should see something like "Python 3.8.x" or higher
+   - Note: On macOS, use `python3` and `pip3` commands (not `python` and `pip`)
 
-   - Open a terminal/command prompt
-   - Navigate to the folder containing the script
-   - Run the script with:
+2. Verify pip is working:
+
+   - In Terminal, type `pip3 --version`
+
+3. If Python isn't installed or is outdated:
+   - Install [Homebrew](https://brew.sh/) if you don't have it:
      ```
-     python upwork-job-alert-bot.py
+     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
      ```
-   - The bot will start running and checking for new jobs
+   - Install Python with Homebrew:
+     ```
+     brew install python
+     ```
 
-2. **For Windows users**
+#### Linux (Ubuntu/Debian)
 
-   - You can also create a batch file (`.bat`) to run the script:
-     1. Create a new text file in the same folder as the script
-     2. Add the following line:
-        ```
-        python upwork-job-alert-bot.py
-        pause
-        ```
-     3. Save the file as `start_bot.bat`
-     4. Double-click this file to run the bot
+1. Check Python installation:
 
-3. **For macOS/Linux users**
-   - You can create a shell script to run the bot:
-     1. Create a new text file in the same folder as the script
-     2. Add the following lines:
-        ```bash
-        #!/bin/bash
-        python3 upwork-job-alert-bot.py
-        ```
-     3. Save the file as `start_bot.sh`
-     4. Make it executable with:
-        ```
-        chmod +x start_bot.sh
-        ```
-     5. Run the script with:
-        ```
-        ./start_bot.sh
-        ```
+   - Open Terminal
+   - Type `python3 --version` and press Enter
 
-## Customizing the Bot
+2. Verify pip is working:
 
-- **Check interval**: Change the `CHECK_INTERVAL` value (in minutes) to control how often the bot checks for new jobs
-- **Debug options**: Set `SAVE_SEARCH_HTML`, `SAVE_POST_HTML`, and `SAVE_TELEGRAM_MESSAGE` to `True` or `False` to enable/disable saving debug information
+   - In Terminal, type `pip3 --version`
+
+3. If Python isn't installed or is outdated:
+   ```bash
+   sudo apt update
+   sudo apt install python3 python3-pip
+   ```
+
+#### Linux (CentOS/RHEL/Fedora)
+
+1. Check Python installation:
+
+   - Open Terminal
+   - Type `python3 --version`
+
+2. Verify pip is working:
+
+   - In Terminal, type `pip3 --version`
+
+3. If Python isn't installed or is outdated:
+   ```bash
+   sudo dnf install python3 python3-pip  # For Fedora/CentOS 8+
+   # OR
+   sudo yum install python3 python3-pip  # For older CentOS/RHEL
+   ```
+
+Now that you've verified Python and pip are working correctly, you can proceed with the installation.
+
+### Step 1: Download the Project
+
+If you're familiar with Git:
+
+```bash
+git clone https://github.com/yourusername/upwork-job-search-alerts.git
+cd upwork-job-search-alerts
+```
+
+If you're not familiar with Git:
+
+1. Click the green "Code" button at the top of this GitHub page
+2. Select "Download ZIP"
+3. Extract the ZIP file to a folder on your computer
+4. Open a command prompt or terminal and navigate to that folder
+
+### Step 2: Install Python Dependencies
+
+#### Windows
+
+```bash
+pip install -r requirements.txt
+```
+
+#### macOS/Linux
+
+```bash
+pip3 install -r requirements.txt
+```
+
+This installs all necessary Python libraries specified in the requirements.txt file.
+
+If you encounter permission issues, try adding the `--user` flag:
+
+#### Windows
+
+```bash
+pip install --user -r requirements.txt
+```
+
+#### macOS/Linux
+
+```bash
+pip3 install --user -r requirements.txt
+```
+
+### Step 3: Set Up Your Telegram Bot
+
+The tool sends notifications through Telegram, so you'll need to create a bot:
+
+1. Open Telegram and search for **@BotFather**
+2. Start a chat with BotFather and send the message: `/newbot`
+3. Follow the instructions to name your bot
+4. **Important**: Save the API token provided by BotFather (it looks like `123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ`)
+
+Next, you need to get your Telegram chat ID:
+
+1. Search for **@userinfobot** in Telegram
+2. Start a chat with this bot, and it will reply with your account information
+3. Copy your ID number (it typically starts with a minus sign if you're not using a channel)
+
+### Step 4: Create Your Configuration File
+
+1. In the project folder, create a file named `.env` based on the `.envexample` file
+2. Open the `.env` file in a text editor and fill in your details:
+
+```
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+TELEGRAM_CHAT_ID=your_chat_id_here
+
+SEARCH_URLS=["https://www.upwork.com/nx/search/jobs?q=python&sort=recency"]
+
+PROXY_LIST=[]
+```
+
+### Step 5: Set Up Your Upwork Search URLs
+
+To customize what jobs you monitor:
+
+1. Go to [Upwork Jobs](https://www.upwork.com/nx/search/jobs)
+2. Enter your search terms, select filters (categories, experience level, etc.)
+3. After applying all filters, copy the complete URL from your browser's address bar
+4. Add this URL to the `SEARCH_URLS` array in your `.env` file
+5. You can add multiple URLs by separating them with commas:
+
+```
+SEARCH_URLS=["https://www.upwork.com/nx/search/jobs?q=python&sort=recency", "https://www.upwork.com/nx/search/jobs?q=django&sort=recency"]
+```
+
+## Using Proxies (Optional)
+
+Using proxies can help prevent rate limiting or IP blocking. If you don't need proxies, you can leave the `PROXY_LIST` empty.
+
+If you want to use proxies, here are some examples of supported formats:
+
+```
+PROXY_LIST=[
+  "socks5://username:password@dallas.us.socks.nordhold.net:1080",
+  "socks5://atlanta.us.socks.nordhold.net:1080",
+  "http://username:password@proxy.example.com:8080",
+  "http://192.168.1.1:8080",
+  "https://proxy.example.com:3128"
+]
+```
+
+You can obtain proxies from various proxy service providers such as:
+
+- NordVPN
+- ExpressVPN
+- Bright Data (formerly Luminati)
+- SmartProxy
+- OxyLabs
+
+Most of these services will provide instructions on how to format their proxy addresses for your use.
+
+## Running the Tool
+
+To start monitoring for new jobs:
+
+#### Windows
+
+```bash
+python upwork-job-search-alerts.py
+```
+
+#### macOS/Linux
+
+```bash
+python3 upwork-job-search-alerts.py
+```
+
+### Running in the Background
+
+#### Windows
+
+1. Create a batch file named `start_upwork_monitor.bat` with the following content:
+   ```batch
+   @echo off
+   start /min cmd /c "python upwork-job-search-alerts.py > upwork_log.txt 2>&1"
+   ```
+2. Double-click this file to run the script in the background
+
+#### macOS/Linux
+
+1. Using nohup (keeps running after you close terminal):
+   ```bash
+   nohup python3 upwork-job-search-alerts.py > upwork_log.txt 2>&1 &
+   ```
+2. To stop the process later:
+   ```bash
+   ps aux | grep upwork-job-search-alerts.py
+   kill [PID]  # Replace [PID] with the process ID you found
+   ```
+
+The script will:
+
+1. Check your search URLs for new job postings
+2. Send you Telegram notifications for new matches
+3. Continue to run and check periodically (default: every 3 minutes)
+
+You can keep it running in the background or on a server for continuous monitoring.
+
+## Customization Options
+
+You can modify these parameters in the `upwork-job-search-alerts.py` file:
+
+- `CHECK_INTERVAL = 3` - Time between checks in minutes
+- `MAX_DESCRIPTION_LENGTH = 300` - Maximum length of job descriptions in notifications
+- `SAVE_SEARCH_HTML = False` - Whether to save search page HTML for debugging
+- `SAVE_POST_HTML = False` - Whether to save job posting HTML for debugging
 
 ## Troubleshooting
 
-- **Chrome Driver issues**: If you see errors related to Chrome driver, make sure Chrome browser is installed on your system
-- **Parsing errors**: If the bot isn't finding jobs, the Upwork website structure might have changed. Enable debug options to save HTML for inspection
-- **Telegram errors**: Double-check your bot token and chat ID; make sure you've started a chat with your bot
+**Problem**: No notifications are being received
 
-## Running the Bot Continuously
+- Verify your Telegram bot token and chat ID are correct
+- Make sure you've started a conversation with your bot on Telegram (send a `/start` message to your bot)
+- Check your internet connection and proxy settings if using proxies
 
-To keep the bot running even after closing your terminal:
+**Problem**: Script crashes or doesn't load jobs
 
-- **On Windows**: Consider setting up a scheduled task
-- **On macOS/Linux**: Consider using `nohup` or setting up a systemd service
+- Make sure Chrome/Chromium is installed
+- Try running without proxies first
+- Check the console for specific error messages
 
-## Important Notes
+**Problem**: Getting rate limited by Upwork
 
-- Using automated tools to scrape websites may violate terms of service
-- Use proxies and reasonable delays to avoid being blocked
-- This bot is for educational purposes only
+- Increase the check interval
+- Use proxies
+- Reduce the number of search URLs you're monitoring
+
+**Problem**: "Command not found" when running pip or python
+
+- See the platform-specific instructions in Step 0
+- Make sure Python is installed correctly and added to your PATH
+
+**Problem**: Chrome driver fails to start
+
+- Ensure Chrome or Chromium is installed on your system
+- Try reinstalling the selenium package:
+  ```bash
+  pip install --upgrade selenium webdriver-manager
+  ```
+- For Linux users, you may need additional dependencies:
+  ```bash
+  sudo apt install chromium-browser chromium-chromedriver  # Ubuntu/Debian
+  sudo dnf install chromium chromedriver  # Fedora
+  ```
+
+**Problem**: Browser automation detected by Upwork
+
+- Try adjusting the `USER_AGENTS` list in the script with more recent browser user agent strings
+- Use proxies to rotate IP addresses
+- Increase the random delays in the script
+
+## Technical Details
+
+This tool uses:
+
+- **Selenium** with Chrome WebDriver for browsing Upwork
+- **BeautifulSoup** for parsing HTML content
+- **Requests** for sending Telegram notifications
+- **Python dotenv** for configuration
+
+The script maintains a history of seen jobs in `job_history.pkl` to avoid sending duplicate notifications.
+
+## Legal Considerations
+
+Please use this tool responsibly and in accordance with Upwork's Terms of Service. This script is intended for personal use to help freelancers find relevant opportunities more efficiently.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
