@@ -1,6 +1,6 @@
 # Upwork Job Search Alerts
 
-This tool allows you to monitor Upwork for new job postings matching your search criteria and sends real-time alerts to your Telegram account. Never miss out on potential job opportunities again!
+This tool monitors Upwork for new job postings matching your search criteria and sends real-time alerts to your Telegram account. Never miss out on potential job opportunities again!
 
 ## Features
 
@@ -111,7 +111,7 @@ Now that you've verified Python and pip are working correctly, you can proceed w
 If you're familiar with Git:
 
 ```bash
-git clone https://github.com/yourusername/upwork-job-search-alerts.git
+git clone git@github.com:jmdoan1/upwork-job-search-alerts.git # or https://github.com/jmdoan1/upwork-job-search-alerts.git
 cd upwork-job-search-alerts
 ```
 
@@ -124,32 +124,40 @@ If you're not familiar with Git:
 
 ### Step 2: Install Python Dependencies
 
+> **Note**: The included run scripts ([run.sh](run.sh) for macOS/Linux or [run.bat](run.bat) for Windows) handle all of this automatically. See the "Running the Tool" section for details.
+
+Modern Python installations often prevent direct installation of packages to avoid breaking system dependencies. The best practice is to use virtual environments:
+
 #### Windows
 
 ```bash
+# Create a virtual environment
+python -m venv venv
+
+# Activate it
+venv\Scripts\activate
+
+# Install dependencies (notice we just use pip, not pip3 when in a virtual environment)
 pip install -r requirements.txt
 ```
 
 #### macOS/Linux
 
 ```bash
-pip3 install -r requirements.txt
+# Create a virtual environment
+python3 -m venv .venv
+
+# Activate it
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-This installs all necessary Python libraries specified in the requirements.txt file.
-
-If you encounter permission issues, try adding the `--user` flag:
-
-#### Windows
+When you're done using the virtual environment, you can deactivate it:
 
 ```bash
-pip install --user -r requirements.txt
-```
-
-#### macOS/Linux
-
-```bash
-pip3 install --user -r requirements.txt
+deactivate
 ```
 
 ### Step 3: Set Up Your Telegram Bot
@@ -165,7 +173,7 @@ Next, you need to get your Telegram chat ID:
 
 1. Search for **@userinfobot** in Telegram
 2. Start a chat with this bot, and it will reply with your account information
-3. Copy your ID number (it typically starts with a minus sign if you're not using a channel)
+3. Copy your ID number
 
 ### Step 4: Create Your Configuration File
 
@@ -176,7 +184,7 @@ Next, you need to get your Telegram chat ID:
 TELEGRAM_BOT_TOKEN=your_bot_token_here
 TELEGRAM_CHAT_ID=your_chat_id_here
 
-SEARCH_URLS=["https://www.upwork.com/nx/search/jobs?q=python&sort=recency"]
+SEARCH_URLS=["https://www.upwork.com/nx/search/jobs"]
 
 PROXY_LIST=[]
 ```
@@ -201,14 +209,14 @@ Using proxies can help prevent rate limiting or IP blocking. If you don't need p
 
 If you want to use proxies, here are some examples of supported formats:
 
+- "socks5://username:password@dallas.us.socks.nordhold.net:1080",
+- "socks5://atlanta.us.socks.nordhold.net:1080",
+- "http://username:password@proxy.example.com:8080",
+- "http://192.168.1.1:8080",
+- "https://proxy.example.com:3128"
+
 ```
-PROXY_LIST=[
-  "socks5://username:password@dallas.us.socks.nordhold.net:1080",
-  "socks5://atlanta.us.socks.nordhold.net:1080",
-  "http://username:password@proxy.example.com:8080",
-  "http://192.168.1.1:8080",
-  "https://proxy.example.com:3128"
-]
+PROXY_LIST=[ "socks5://username:password@dallas.us.socks.nordhold.net:1080", "socks5://atlanta.us.socks.nordhold.net:1080", "http://username:password@proxy.example.com:8080", "http://192.168.1.1:8080", "https://proxy.example.com:3128"]
 ```
 
 You can obtain proxies from various proxy service providers such as:
@@ -223,18 +231,66 @@ Most of these services will provide instructions on how to format their proxy ad
 
 ## Running the Tool
 
-To start monitoring for new jobs:
+### Easy Setup & Run (Recommended)
+
+The project includes convenience scripts that handle everything for you automatically:
+
+1. **Make the script executable** (macOS/Linux only):
+
+   ```bash
+   chmod +x run.sh
+   ```
+
+2. **Run the script**:
+   - On Windows: Double-click `run.bat` or run it from Command Prompt
+   - On macOS/Linux: `./run.sh`
+
+These scripts will:
+
+- Create a virtual environment if one doesn't exist
+- Install/update all required dependencies
+- Run the Upwork job search alerts tool
+
+### Manual Setup (Advanced)
+
+If you prefer to set things up manually:
 
 #### Windows
 
 ```bash
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the script
 python upwork-job-search-alerts.py
+
+# When done, deactivate the environment
+deactivate
 ```
 
 #### macOS/Linux
 
 ```bash
-python3 upwork-job-search-alerts.py
+# Create a virtual environment
+python3 -m venv .venv
+
+# Activate the virtual environment
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the script
+python upwork-job-search-alerts.py
+
+# When done, deactivate the environment
+deactivate
 ```
 
 ### Running in the Background
@@ -244,6 +300,7 @@ python3 upwork-job-search-alerts.py
 1. Create a batch file named `start_upwork_monitor.bat` with the following content:
    ```batch
    @echo off
+   call venv\Scripts\activate
    start /min cmd /c "python upwork-job-search-alerts.py > upwork_log.txt 2>&1"
    ```
 2. Double-click this file to run the script in the background
@@ -252,7 +309,8 @@ python3 upwork-job-search-alerts.py
 
 1. Using nohup (keeps running after you close terminal):
    ```bash
-   nohup python3 upwork-job-search-alerts.py > upwork_log.txt 2>&1 &
+   source .venv/bin/activate
+   nohup python upwork-job-search-alerts.py > upwork_log.txt 2>&1 &
    ```
 2. To stop the process later:
    ```bash
@@ -273,9 +331,11 @@ You can keep it running in the background or on a server for continuous monitori
 You can modify these parameters in the `upwork-job-search-alerts.py` file:
 
 - `CHECK_INTERVAL = 3` - Time between checks in minutes
-- `MAX_DESCRIPTION_LENGTH = 300` - Maximum length of job descriptions in notifications
+- `MAX_DESCRIPTION_LENGTH = 300` - Maximum length of job descriptions in notifications before
 - `SAVE_SEARCH_HTML = False` - Whether to save search page HTML for debugging
 - `SAVE_POST_HTML = False` - Whether to save job posting HTML for debugging
+- `SAVE_TELEGRAM_MESSAGES = False` - Whether to save job posting HTML for debugging
+- `USE_PROXY = True` - Whether or not to use the proxy list from the .env file
 
 ## Troubleshooting
 
@@ -320,6 +380,20 @@ You can modify these parameters in the `upwork-job-search-alerts.py` file:
 - Try adjusting the `USER_AGENTS` list in the script with more recent browser user agent strings
 - Use proxies to rotate IP addresses
 - Increase the random delays in the script
+
+**Problem**: "externally-managed-environment" error when installing packages
+
+- This is a protective feature in newer Python versions
+- Use a virtual environment as described in the setup instructions
+- Or use the provided run scripts which handle virtual environments automatically
+
+**Problem**: Issues installing lxml or other compiled packages
+
+- The provided run scripts attempt multiple installation methods
+- On macOS: You may need to install system dependencies: `brew install libxml2 libxslt`
+- On Ubuntu/Debian: `sudo apt-get install python3-lxml libxml2-dev libxslt1-dev`
+- On Fedora/RHEL: `sudo dnf install python3-lxml libxml2-devel libxslt-devel`
+- On Windows: Download a precompiled wheel from https://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml that matches your Python version
 
 ## Technical Details
 
